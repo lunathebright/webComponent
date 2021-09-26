@@ -1,4 +1,71 @@
 body {
-  background-color: oldlace;
+  background: rgba(0, 0, 0, 0.5);
 }
 
+.dialog-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width: 420px;
+  padding: 30px 0;
+  background: white;
+}
+
+/* dialog title */
+form h1 {
+  margin: 0 0 20px 0;
+}
+
+form h1 input {
+  font-size: 20px;
+}
+
+/* dialog rows */
+form label {
+  display: inline-block;
+  width: 25%;
+}
+
+form input {
+  display: inline-block;
+  box-sizing: border-box;
+  width: calc(75% - 4px);
+}
+
+form input:read-only {
+  border: none;
+  background: none;
+}
+
+form input:focus {
+  outline: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 10px;
+  list-style: none;
+}
+
+/* dialog btns */
+.btns {
+  margin-top: 80px;
+  text-align: right;
+}
+
+.btns button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background: none;
+  border: 1px solid rgb(118, 118, 118);
+  cursor: pointer;
+}
