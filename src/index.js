@@ -1,4 +1,7 @@
-import './style.css';
+import "./style.css";
+
+const main = document.querySelector("main");
+let isOpened = false;
 
 class CommonDialog {
   constructor(options) {
@@ -10,42 +13,51 @@ class CommonDialog {
     this.Team = options.Team;
   }
 
-  onOpen () {
-    console.log('open')
+  open() {
+    isOpened = true;
+    main.className = "active";
+    main.appendChild(Dialog());
+    setEventListener();
   }
 
-  onClose () {
-    console.log('close')
+  close(e) {
+    e.preventDefault();
+    isOpened = false;
+    main.classList.remove("active");
+    const dialog = document.querySelector(".dialog-box");
+    dialog.remove();
   }
 
-  onEdit () {
-    console.log('edit')
+  onEdit() {
+    console.log("edit");
   }
 
-  onSave () {
-    console.log('save')
+  onSave() {
+    console.log("save");
   }
 
-  onCancel () {
-    console.log('save')
+  onCancel() {
+    console.log("save");
   }
 }
 
 let options = {
-  title: 'Test&nbsp;Title',
-  ID: 'Liveconnect',
-  Email: 'liveconnect@liveconnect.co.kr',
-  Name: 'liveconnect',
-  Mobile: '010-0000-0000',
-  Team: 'Media&nbsp;Lab.'
+  title: "Test&nbsp;Title",
+  ID: "Liveconnect",
+  Email: "liveconnect@liveconnect.co.kr",
+  Name: "liveconnect",
+  Mobile: "010-0000-0000",
+  Team: "Media&nbsp;Lab.",
 };
 
 let dialog = new CommonDialog(options);
 
 const Dialog = () => {
-  const dialogSection = document.createElement("form");
+  const dialogSection = document.createElement("section");
+  dialogSection.className = "dialog-box";
 
   const viewMode = `
+  <form>
     <h1 class="dialog-title">
       <input type="text" name="title" readonly value=${dialog.title}>
     </h1>
@@ -72,12 +84,14 @@ const Dialog = () => {
       </li>
     </ul>
     <div class="btns">
-      <button>Cancel</button>
-      <button>Save</button>
+      <button type="button">Edit</button>
+      <button type="button" class="close-btn">Close</button>
     </div>
+  </form
   `;
 
   const editMode = `
+  <form>
     <h1 class="dialog-title">
       <input type="text" name="title" value=${dialog.title}>
     </h1>
@@ -107,12 +121,32 @@ const Dialog = () => {
       <button>Cancel</button>
       <button>Save</button>
     </div>
+  </form>
 `;
 
-  dialogSection.innerHTML = editMode
+  dialogSection.innerHTML = viewMode;
 
-  return dialogSection
-}
+  return dialogSection;
+};
 
-const dialogBox = document.querySelector(".dialog-box");
-dialogBox.appendChild(Dialog());
+const setEventListener = () => {
+  if (isOpened) {
+    const closeBtn = document.querySelector(".close-btn");
+    closeBtn.addEventListener("click", dialog.close);
+  }
+};
+
+const DialogBtn = () => {
+  const setBtn = document.createElement("button");
+  setBtn.className = "set-btn";
+  setBtn.innerText = "dialog";
+  setBtn.addEventListener("click", dialog.open);
+
+  main.appendChild(setBtn);
+
+  return setBtn;
+};
+
+(function () {
+  DialogBtn();
+})();

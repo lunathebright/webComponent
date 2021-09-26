@@ -1,5 +1,18 @@
 body {
+  margin: 0;
+}
+
+main.active {
+  width: 100vw;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.5);
+}
+
+.set-btn {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
 }
 
 .dialog-box {
