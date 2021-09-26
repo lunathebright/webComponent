@@ -1,7 +1,6 @@
 import "./style.css";
 
 const main = document.querySelector("main");
-let isOpened = false;
 
 class CommonDialog {
   constructor(options) {
@@ -14,22 +13,28 @@ class CommonDialog {
   }
 
   open() {
-    isOpened = true;
     main.className = "active";
-    main.appendChild(Dialog());
-    setEventListener();
+    main.appendChild(Dialog(false));
+    setViewEventListener();
   }
 
-  close(e) {
-    e.preventDefault();
-    isOpened = false;
+  close() {
     main.classList.remove("active");
-    const dialog = document.querySelector(".dialog-box");
-    dialog.remove();
+    const dialogBox = document.querySelector(".dialog-box");
+    dialogBox.remove();
   }
 
-  onEdit() {
-    console.log("edit");
+  editable(isEditable) {
+    const dialogBox = document.querySelector(".dialog-box");
+    dialogBox.remove();
+
+    if (isEditable) {
+      main.appendChild(Dialog(true));
+      setEditEventListener();
+    } else {
+      main.appendChild(Dialog(false));
+      setViewEventListener();
+    }
   }
 
   onSave() {
@@ -52,7 +57,7 @@ let options = {
 
 let dialog = new CommonDialog(options);
 
-const Dialog = () => {
+const Dialog = (isEditMode) => {
   const dialogSection = document.createElement("section");
   dialogSection.className = "dialog-box";
 
@@ -84,7 +89,7 @@ const Dialog = () => {
       </li>
     </ul>
     <div class="btns">
-      <button type="button">Edit</button>
+      <button type="button" class="edit-btn">Edit</button>
       <button type="button" class="close-btn">Close</button>
     </div>
   </form
@@ -118,22 +123,32 @@ const Dialog = () => {
       </li>
     </ul>
     <div class="btns">
-      <button>Cancel</button>
-      <button>Save</button>
+      <button type="button" class="cancel-btn">Cancel</button>
+      <button type="button" class="save-btn">Save</button>
     </div>
   </form>
 `;
 
-  dialogSection.innerHTML = viewMode;
+  isEditMode
+    ? (dialogSection.innerHTML = editMode)
+    : (dialogSection.innerHTML = viewMode);
 
   return dialogSection;
 };
 
-const setEventListener = () => {
-  if (isOpened) {
-    const closeBtn = document.querySelector(".close-btn");
-    closeBtn.addEventListener("click", dialog.close);
-  }
+const setViewEventListener = () => {
+  const closeBtn = document.querySelector(".close-btn");
+  closeBtn.addEventListener("click", dialog.close);
+
+  const editBtn = document.querySelector(".edit-btn");
+  editBtn.addEventListener("click", () => dialog.editable(true));
+};
+
+const setEditEventListener = () => {
+  const cancelBtn = document.querySelector(".cancel-btn");
+  cancelBtn.addEventListener("click", () => dialog.editable(false));
+
+  const saveBtn = document.querySelector(".save-btn");
 };
 
 const DialogBtn = () => {
