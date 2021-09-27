@@ -1,9 +1,9 @@
-import CommonDialog from "./CommonDialog";
+import CommonDialog from "./components/CommonDialog";
+import DialogBtn from "./components/DialogBtn";
 import { arrToObj } from "./utils";
 
 import "./style.css";
 
-const main = document.querySelector("main");
 const commonDialog = document.querySelector("common-dialog");
 
 export let options = {
@@ -52,6 +52,7 @@ class Dialog {
     commonDialog.setAttribute("save", "false");
     commonDialog.setAttribute("mode", "view");
     setViewEventListener();
+    options = { ...defaultOptions };
   }
 
   save() {
@@ -86,10 +87,10 @@ class Dialog {
   }
 }
 
-customElements.define("common-dialog", CommonDialog);
+// Dialog instance 생성
+export let dialog = new Dialog(Object.entries(options));
 
-let dialog = new Dialog(Object.entries(options));
-
+// 입력값 변경 핸들링 함수
 const onTextChange = (e) => {
   const { name, value } = e.target;
   options[name] = value;
@@ -118,18 +119,7 @@ const setEditEventListener = () => {
   });
 };
 
-// dialog open button
-const DialogBtn = () => {
-  const setBtn = document.createElement("button");
-  setBtn.className = "set-btn";
-  setBtn.innerText = "dialog";
-  setBtn.addEventListener("click", dialog.open);
-
-  main.appendChild(setBtn);
-
-  return setBtn;
-};
-
 (function () {
-  DialogBtn();
+  customElements.define("dialog-btn", DialogBtn);
+  customElements.define("common-dialog", CommonDialog);
 })();

@@ -1,13 +1,10 @@
-import { options, defaultOptions } from ".";
-import dialogContents from "./dialogContents";
+import dialogContents from "../dialogContents";
+import { options, defaultOptions } from "..";
 
 const commonDialog = document.querySelector("common-dialog");
 
 class CommonDialog extends HTMLElement {
-  constructor() {
-    super();
-  }
-
+  // render 함수
   render() {
     const dialogBox = document.createElement("section");
     dialogBox.className = "dialog-box";
@@ -23,10 +20,12 @@ class CommonDialog extends HTMLElement {
     this.appendChild(dialogBox);
   }
 
+  // re-render 조건
   static get observedAttributes() {
     return ["mode", "save"];
   }
 
+  //  re-render 함수
   attributeChangedCallback() {
     const dialogBox = document.querySelector(".dialog-box");
     if (dialogBox) {
