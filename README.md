@@ -104,6 +104,6 @@ dialog.on('onSave', (param) => {
 3. webpack-dev-server로 src/index.js 접속
 4. dialog 버튼으로 dialog 창 활성화
 
-* JS, CSS, webpack, loader 사용
+* changeTitle API는 save, cancel과 기능이 일부 중복되는데, 이벤트가 발생하는 과정에서 어떤 식으로 차이가 있어야 하는지 판단하기가 힘들어 구현하지 않았습니다.
 
 ```
