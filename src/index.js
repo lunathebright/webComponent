@@ -1,18 +1,22 @@
+import dialogContents from "./dialogContents";
+import { arrToObj } from "./utils";
+
 import "./style.css";
 
 const main = document.querySelector("main");
 
+// CommonDialog Class
 class CommonDialog {
-  constructor(options) {
-    this.title = options.title;
-    this.id = options.id;
-    this.email = options.email;
-    this.name = options.name;
-    this.mobile = options.mobile;
-    this.team = options.team;
-  }
+  constructor(optionsArr) {
+    const optionsObj = arrToObj(optionsArr);
 
-  optionsArr = Object.entries(options);
+    this.title = optionsObj.title;
+    this.id = optionsObj.id;
+    this.email = optionsObj.email;
+    this.name = optionsObj.name;
+    this.mobile = optionsObj.mobile;
+    this.team = optionsObj.team;
+  }
 
   open() {
     main.className = "active";
@@ -69,11 +73,7 @@ class CommonDialog {
   }
 
   set setDataSource(optionsArr) {
-    const optionsObj = optionsArr.reduce((acc, crr) => {
-      const [key, value] = crr;
-      acc[key] = value;
-      return acc;
-    }, {});
+    const optionsObj = arrToObj(optionsArr);
 
     this._title = optionsObj.title;
     this._id = optionsObj.id;
@@ -84,6 +84,7 @@ class CommonDialog {
   }
 }
 
+// CommonDialog instance 생성 options
 let options = {
   title: "Test&nbsp;Title",
   id: "Liveconnect",
@@ -93,99 +94,37 @@ let options = {
   team: "Media&nbsp;Lab.",
 };
 
+// CommonDialog instance 생성 options 복사본
 let defaultOptions = { ...options };
 
+// CommonDialog instance 생성 함수
 const newDialog = (opt = options) => {
-  let dialog = new CommonDialog(opt);
+  const optionsArr = Object.entries(opt);
+  let dialog = new CommonDialog(optionsArr);
   return dialog;
 };
 
-const Dialog = (isEditMode, opt = options) => {
+// dialog component
+const Dialog = (isEditMode = false, opt = options) => {
   const dialog = newDialog(opt);
 
   const dialogSection = document.createElement("section");
   dialogSection.className = "dialog-box";
 
-  const viewMode = `
-  <form>
-    <h1 class="dialog-title">
-      <input type="text" name="title" readonly value=${dialog.title}>
-    </h1>
-    <ul>
-      <li>
-        <label for="id">ID</label>
-        <input type="text" class="value-inputs" name="id" id="id" readonly value=${dialog.id}>
-      </li>
-      <li>
-        <label for="email">Email</label>
-        <input type="text" class="value-inputs" name="email" id="email" readonly value=${dialog.email}>
-      </li>
-      <li>
-        <label for="name">Name</label>
-        <input type="text" class="value-inputs" name="name" id="name" readonly value=${dialog.name}>
-      </li>
-      <li>
-        <label for="mobile">Mobile</label>
-        <input type="text" class="value-inputs" name="mobile" id="mobile" readonly value=${dialog.mobile}>
-      </li>
-      <li>
-        <label for="team">Team</label>
-        <input type="text" class="value-inputs" name="team" id="team" readonly value=${dialog.team}>
-      </li>
-    </ul>
-    <div class="btns">
-      <button type="button" class="edit-btn">Edit</button>
-      <button type="button" class="close-btn">Close</button>
-    </div>
-  </form
-  `;
+  const innerContents = dialogContents(isEditMode, dialog);
 
-  const editMode = `
-  <form>
-    <h1 class="dialog-title">
-      <input type="text" name="title" value=${dialog.title}>
-    </h1>
-    <ul>
-      <li>
-        <label for="id">ID</label>
-        <input type="text" class="value-inputs" name="id" id="id" readonly value=${dialog.id}>
-      </li>
-      <li>
-        <label for="email">Email</label>
-        <input type="text" class="value-inputs" name="mail" id="email" value=${dialog.email}>
-      </li>
-      <li>
-        <label for="name">Name</label>
-        <input type="text" class="value-inputs" name="name" id="name" value=${dialog.name}>
-      </li>
-      <li>
-        <label for="mobile">Mobile</label>
-        <input type="text" class="value-inputs" name="mobile" id="mobile" value=${dialog.mobile}>
-      </li>
-      <li>
-        <label for="team">Team</label>
-        <input type="text" class="value-inputs" name="team" id="team" readonly value=${dialog.team}>
-      </li>
-    </ul>
-    <div class="btns">
-      <button type="button" class="cancel-btn">Cancel</button>
-      <button type="button" class="save-btn">Save</button>
-    </div>
-  </form>
-`;
-
-  isEditMode
-    ? (dialogSection.innerHTML = editMode)
-    : (dialogSection.innerHTML = viewMode);
+  dialogSection.innerHTML = innerContents;
 
   return dialogSection;
 };
 
+// 입력값 핸들링 함수
 const onTextChange = (e) => {
   const { name, value } = e.target;
   options[name] = value;
 };
 
+// 조회 모드 시 이벤트리스너 부착 함수
 const setViewEventListener = () => {
   const closeBtn = document.querySelector(".close-btn");
   closeBtn.addEventListener("click", newDialog().close);
@@ -194,6 +133,7 @@ const setViewEventListener = () => {
   editBtn.addEventListener("click", () => newDialog().editable(true));
 };
 
+// 수정 모드 시 이벤트리스너 부착 함수
 const setEditEventListener = () => {
   const cancelBtn = document.querySelector(".cancel-btn");
   cancelBtn.addEventListener("click", newDialog().cancel);
@@ -207,6 +147,7 @@ const setEditEventListener = () => {
   });
 };
 
+// dialog open button
 const DialogBtn = () => {
   const setBtn = document.createElement("button");
   setBtn.className = "set-btn";
