@@ -61,26 +61,26 @@ class CommonDialog {
   }
 
   get getDataSource() {
-    const optionsObj = {
-      title: this._title,
-      id: this._id,
-      email: this._email,
-      name: this._name,
-      mobile: this._mobile,
-      team: this._team,
+    const dataSource = {
+      title: this.title,
+      id: this.id,
+      email: this.email,
+      name: this.name,
+      mobile: this.mobile,
+      team: this.team,
     };
-    return optionsObj;
+    return dataSource;
   }
 
   set setDataSource(optionsArr) {
     const optionsObj = arrToObj(optionsArr);
 
-    this._title = optionsObj.title;
-    this._id = optionsObj.id;
-    this._email = optionsObj.email;
-    this._name = optionsObj.name;
-    this._mobile = optionsObj.mobile;
-    this._team = optionsObj.team;
+    this.title = optionsObj.title;
+    this.id = optionsObj.id;
+    this.email = optionsObj.email;
+    this.name = optionsObj.name;
+    this.mobile = optionsObj.mobile;
+    this.team = optionsObj.team;
   }
 }
 
