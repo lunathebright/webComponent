@@ -86,7 +86,7 @@ class CommonDialog {
 
 // CommonDialog instance 생성 options
 let options = {
-  title: "Test&nbsp;Title",
+  title: "Title",
   id: "Liveconnect",
   email: "liveconnect@liveconnect.co.kr",
   name: "liveconnect",
