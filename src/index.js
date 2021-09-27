@@ -12,6 +12,8 @@ class CommonDialog {
     this.team = options.team;
   }
 
+  optionsArr = Object.entries(options);
+
   open() {
     main.className = "active";
     main.appendChild(Dialog(false, defaultOptions));
@@ -37,10 +39,6 @@ class CommonDialog {
     }
   }
 
-  changeTitle() {
-    console.log("change title");
-  }
-
   save() {
     const dialogBox = document.querySelector(".dialog-box");
     dialogBox.remove();
@@ -58,12 +56,31 @@ class CommonDialog {
     setViewEventListener();
   }
 
-  getDataSource() {
-    console.log("get data");
+  get getDataSource() {
+    const optionsObj = {
+      title: this._title,
+      id: this._id,
+      email: this._email,
+      name: this._name,
+      mobile: this._mobile,
+      team: this._team,
+    };
+    return optionsObj;
   }
 
-  setDataSource() {
-    console.log("set data");
+  set setDataSource(optionsArr) {
+    const optionsObj = optionsArr.reduce((acc, crr) => {
+      const [key, value] = crr;
+      acc[key] = value;
+      return acc;
+    }, {});
+
+    this._title = optionsObj.title;
+    this._id = optionsObj.id;
+    this._email = optionsObj.email;
+    this._name = optionsObj.name;
+    this._mobile = optionsObj.mobile;
+    this._team = optionsObj.team;
   }
 }
 
