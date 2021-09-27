@@ -1,40 +1,40 @@
-const dialogContents = (isEditMode, dialog) => {
+const dialogContents = (isEditMode, options) => {
   const innerContents = `
   <form>
   <h1 class="dialog-title">
     <input type="text" name="title" ${!isEditMode && "readonly"} value=${
-    dialog.title
+    options.title
   }>
   </h1>
   <ul>
     <li>
       <label for="id">ID</label>
       <input type="text" class="value-inputs" name="id" id="id" readonly value=${
-        dialog.id
+        options.id
       }>
     </li>
     <li>
       <label for="email">Email</label>
       <input type="text" class="value-inputs" name="email" id="email" ${
         !isEditMode && "readonly"
-      } value=${dialog.email}>
+      } value=${options.email}>
     </li>
     <li>
       <label for="name">Name</label>
       <input type="text" class="value-inputs" name="name" id="name" ${
         !isEditMode && "readonly"
-      } value=${dialog.name}>
+      } value=${options.name}>
     </li>
     <li>
       <label for="mobile">Mobile</label>
       <input type="text" class="value-inputs" name="mobile" id="mobile" ${
         !isEditMode && "readonly"
-      } value=${dialog.mobile}>
+      } value=${options.mobile}>
     </li>
     <li>
       <label for="team">Team</label>
       <input type="text" class="value-inputs" name="team" id="team" readonly value=${
-        dialog.team
+        options.team
       }>
     </li>
   </ul>
@@ -49,7 +49,7 @@ const dialogContents = (isEditMode, dialog) => {
       <button type="button" class="close-btn">Close</button>`
   }
   </div>
-  </form
+  </form>
   `;
 
   return innerContents;

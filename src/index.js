@@ -1,91 +1,12 @@
-import dialogContents from "./dialogContents";
+import CommonDialog from "./CommonDialog";
 import { arrToObj } from "./utils";
 
 import "./style.css";
 
 const main = document.querySelector("main");
+const commonDialog = document.querySelector("common-dialog");
 
-// CommonDialog Class
-class CommonDialog {
-  constructor(optionsArr) {
-    const optionsObj = arrToObj(optionsArr);
-
-    this.title = optionsObj.title;
-    this.id = optionsObj.id;
-    this.email = optionsObj.email;
-    this.name = optionsObj.name;
-    this.mobile = optionsObj.mobile;
-    this.team = optionsObj.team;
-  }
-
-  open() {
-    main.className = "active";
-    main.appendChild(Dialog(false, defaultOptions));
-    setViewEventListener();
-  }
-
-  close() {
-    main.classList.remove("active");
-    const dialogBox = document.querySelector(".dialog-box");
-    dialogBox.remove();
-  }
-
-  editable(isEditable) {
-    const dialogBox = document.querySelector(".dialog-box");
-    dialogBox.remove();
-
-    if (isEditable) {
-      main.appendChild(Dialog(true, defaultOptions));
-      setEditEventListener();
-    } else {
-      main.appendChild(Dialog(false));
-      setViewEventListener();
-    }
-  }
-
-  save() {
-    const dialogBox = document.querySelector(".dialog-box");
-    dialogBox.remove();
-
-    main.appendChild(Dialog(false));
-    setViewEventListener();
-    defaultOptions = { ...options };
-  }
-
-  cancel() {
-    const dialogBox = document.querySelector(".dialog-box");
-    dialogBox.remove();
-
-    main.appendChild(Dialog(false, defaultOptions));
-    setViewEventListener();
-  }
-
-  get getDataSource() {
-    const dataSource = {
-      title: this.title,
-      id: this.id,
-      email: this.email,
-      name: this.name,
-      mobile: this.mobile,
-      team: this.team,
-    };
-    return dataSource;
-  }
-
-  set setDataSource(optionsArr) {
-    const optionsObj = arrToObj(optionsArr);
-
-    this.title = optionsObj.title;
-    this.id = optionsObj.id;
-    this.email = optionsObj.email;
-    this.name = optionsObj.name;
-    this.mobile = optionsObj.mobile;
-    this.team = optionsObj.team;
-  }
-}
-
-// CommonDialog instance 생성 options
-let options = {
+export let options = {
   title: "Title",
   id: "Liveconnect",
   email: "liveconnect@liveconnect.co.kr",
@@ -94,31 +15,81 @@ let options = {
   team: "Media&nbsp;Lab.",
 };
 
-// CommonDialog instance 생성 options 복사본
-let defaultOptions = { ...options };
+export let defaultOptions = { ...options };
 
-// CommonDialog instance 생성 함수
-const newDialog = (opt = options) => {
-  const optionsArr = Object.entries(opt);
-  let dialog = new CommonDialog(optionsArr);
-  return dialog;
-};
+class Dialog {
+  constructor(optionsArr) {
+    const optionsObj = arrToObj(optionsArr);
 
-// dialog component
-const Dialog = (isEditMode = false, opt = options) => {
-  const dialog = newDialog(opt);
+    this._title = optionsObj.title;
+    this._id = optionsObj.id;
+    this._email = optionsObj.email;
+    this._name = optionsObj.name;
+    this._mobile = optionsObj.mobile;
+    this._team = optionsObj.team;
+  }
 
-  const dialogSection = document.createElement("section");
-  dialogSection.className = "dialog-box";
+  open() {
+    commonDialog.classList.add("active");
+    setViewEventListener();
+  }
 
-  const innerContents = dialogContents(isEditMode, dialog);
+  close() {
+    commonDialog.classList.remove("active");
+  }
 
-  dialogSection.innerHTML = innerContents;
+  editable(isEditable) {
+    if (isEditable) {
+      commonDialog.setAttribute("mode", "edit");
+      setEditEventListener();
+    } else {
+      commonDialog.setAttribute("mode", "view");
+      setViewEventListener();
+    }
+  }
 
-  return dialogSection;
-};
+  cancel() {
+    commonDialog.setAttribute("save", "false");
+    commonDialog.setAttribute("mode", "view");
+    setViewEventListener();
+  }
 
-// 입력값 핸들링 함수
+  save() {
+    commonDialog.setAttribute("save", "true");
+    commonDialog.setAttribute("mode", "view");
+    setViewEventListener();
+    defaultOptions = { ...options };
+  }
+
+  get getDataSource() {
+    const dataSource = {
+      title: this._title,
+      id: this._id,
+      email: this._email,
+      name: this._name,
+      mobile: this._mobile,
+      team: this._team,
+    };
+
+    return Object.entries(dataSource);
+  }
+
+  set setDataSource(optionsArr) {
+    const optionsObj = arrToObj(optionsArr);
+
+    this._title = optionsObj.title;
+    this._id = optionsObj.id;
+    this._email = optionsObj.email;
+    this._name = optionsObj.name;
+    this._mobile = optionsObj.mobile;
+    this._team = optionsObj.team;
+  }
+}
+
+customElements.define("common-dialog", CommonDialog);
+
+let dialog = new Dialog(Object.entries(options));
+
 const onTextChange = (e) => {
   const { name, value } = e.target;
   options[name] = value;
@@ -127,19 +98,19 @@ const onTextChange = (e) => {
 // 조회 모드 시 이벤트리스너 부착 함수
 const setViewEventListener = () => {
   const closeBtn = document.querySelector(".close-btn");
-  closeBtn.addEventListener("click", newDialog().close);
+  closeBtn.addEventListener("click", dialog.close);
 
   const editBtn = document.querySelector(".edit-btn");
-  editBtn.addEventListener("click", () => newDialog().editable(true));
+  editBtn.addEventListener("click", () => dialog.editable(true));
 };
 
 // 수정 모드 시 이벤트리스너 부착 함수
 const setEditEventListener = () => {
   const cancelBtn = document.querySelector(".cancel-btn");
-  cancelBtn.addEventListener("click", newDialog().cancel);
+  cancelBtn.addEventListener("click", dialog.cancel);
 
   const saveBtn = document.querySelector(".save-btn");
-  saveBtn.addEventListener("click", newDialog().save);
+  saveBtn.addEventListener("click", dialog.save);
 
   const inputs = document.querySelectorAll("input:read-write");
   inputs.forEach((input) => {
@@ -152,7 +123,7 @@ const DialogBtn = () => {
   const setBtn = document.createElement("button");
   setBtn.className = "set-btn";
   setBtn.innerText = "dialog";
-  setBtn.addEventListener("click", newDialog().open);
+  setBtn.addEventListener("click", dialog.open);
 
   main.appendChild(setBtn);
 

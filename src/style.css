@@ -2,10 +2,9 @@ body {
   margin: 0;
 }
 
-main.active {
+main {
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
 }
 
 /* dialog 활성화 버튼 */
@@ -16,9 +15,25 @@ main.active {
   transform: translate(-50%, -100%);
 }
 
+common-dialog {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9;
+  display: none;
+}
+
+common-dialog.active {
+  display: block;
+}
+
 /* dialog */
 .dialog-box {
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -60%);
