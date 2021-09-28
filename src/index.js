@@ -8,11 +8,11 @@ const commonDialog = document.querySelector("common-dialog");
 
 export let options = {
   title: "Title",
-  id: "Liveconnect",
-  email: "liveconnect@liveconnect.co.kr",
-  name: "liveconnect",
+  id: "user01",
+  email: "user01@mail.com",
+  name: "user",
   mobile: "010-0000-0000",
-  team: "Media&nbsp;Lab.",
+  team: "team.",
 };
 
 export let defaultOptions = { ...options };
